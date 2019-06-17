@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,8 +20,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String firstname;
 
+    @NotNull
     private String lastname;
 
     @NotNull
@@ -35,20 +37,20 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
-    @Column(name = "job-desc")
+    @Column(name = "job_desc")
     private String jobDesc;
 
-    @Column(name = "job-location")
+    @Column(name = "job_location")
     private String jobLocation;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "working-type")
+    @Column(name = "working_type")
     private WorkingType workingType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "email-notification", nullable = false)
+    @Column(name = "email_notification", nullable = false)
     private EmailNotification emailNotification;
 
-    @Column(name = "notification-time")
+    @Column(name = "notification_time")
     private Date notificationTime;
 }

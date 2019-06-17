@@ -1,6 +1,7 @@
 package fraktikant.tflcstefan.hybrit.app.web.controller;
 
 import fraktikant.tflcstefan.hybrit.app.service.impl.UserServiceImpl;
+import fraktikant.tflcstefan.hybrit.app.web.dto.PageDTO;
 import fraktikant.tflcstefan.hybrit.app.web.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,15 +11,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/user")
+@RequestMapping(value = "/api/users")
 public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
 
-    @GetMapping
-    public ResponseEntity<List<UserDTO>> findAll() {
-        List<UserDTO> dtos = userService.findAll();
+    @PostMapping(value = "/search")
+    public ResponseEntity<List<UserDTO>> search(@RequestBody PageDTO pageDTO) {
+        List<UserDTO> dtos = userService.findAll(pageDTO);
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
