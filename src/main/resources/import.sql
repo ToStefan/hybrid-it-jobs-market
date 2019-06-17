@@ -1,7 +1,7 @@
 INSERT INTO ROLES(id, name) VALUES(1, 'ROLE_USER');
 INSERT INTO ROLES(id, name) VALUES(2, 'ROLE_ADMIN');
 
-INSERT INTO USERS(id, firstname, lastname, username, password, email, job_desc, job_location, full_time, email_notification, notification_time) VALUES(1, 'Stefan', 'Tofilovic', 's', 's', 'tflc.stefan@hotmail.com', 'java', 'Serbia', true, 'NEVER', '2019-06-14');
+INSERT INTO USERS(id, firstname, lastname, username, password, email, job_desc, job_location, full_time, email_notification, notification_time) VALUES(1, 'Stefan', 'Tofilovic', 's', 's', 'tflc.stefan@hotmail.com', 'java', 'berlin', true, 'NEVER', '2019-06-14');
 INSERT INTO USERS(id, firstname, lastname, username, password, email, email_notification) VALUES(2, 'Viktor', 'Nikolic', 'v', 'v', 'viktor@mail.com', 'NEVER');
 INSERT INTO USERS(id, firstname, lastname, username, password, email, email_notification) VALUES(3, 'Test', 'Testic', 'test', 'test', 'test@mail.com', 'NEVER');
 INSERT INTO USERS(id, firstname, lastname, username, password, email, email_notification) VALUES(4, 'Admin', 'Admin', 'admin', 'admin', 'admin@mail.com', 'NEVER');

@@ -2,20 +2,14 @@ var basePath = 'http://localhost:8080/api';
 
 var isLogged = true;
 var isAdminLogged = true;
+var loggedUserId = 1;
 
 $(document).ready(function() {
 
+    $('#btnAdminPanel').hide();
     domManager.homePageState();
 
-    $('#btnAdminPanel').hide();
-    if(isLogged){
-        domManager.loggedState();
-    } else{
-        domManager.loggedOutState();
-    }
-    if(isAdminLogged){
-        $('#btnAdminPanel').show();
-    }
+    $('.dropdown-toggle').dropdown()
 
     $('#btnHome').click(function(e) {
         e.preventDefault();
@@ -45,6 +39,59 @@ $(document).ready(function() {
 
 });
 
+var jobsManager = {
+
+    recommendedJobs: function() {
+        $.ajax({
+            url: basePath + '/jobs/user/' + loggedUserId,
+            type: 'GET',
+            success: function (jobs) {
+                $('#recommendedJobs').empty();
+                $.each(jobs, function(index, job) {
+                    $('#recommendedJobs').append(
+                        '<div class="col-md-6">' +
+                            '<div class="card text-center m-2">' +
+                                '<div class="card-header">' +
+                                    '<a href="#" value="' + job.id + '" class="jobDetailsLink">' + job.title + '</a>' +
+                                '</div>' +
+                                '<div class="card-body">' +
+                                    '<h5 class="card-title">' + job.location + '</h5>' +
+                                    '<h6 class="card-title">' + job.type + '</h6>' +
+                                    '<p class="card-text">' + job.description.slice(0, 80) + '</p>' +
+                                '</div>' +
+                                '<div class="card-footer text-muted">' + job.created_at + '</div>' +
+                            '</div>' +
+                        '</div>'
+
+                    );
+                });
+                $('.jobDetailsLink').click(function(e) {
+                    e.preventDefault();
+                    var jobId = $(this).attr("value");
+                    jobsManager.jobDetails(jobId);
+                });
+            }
+        });
+    },
+    jobDetails: function (jobId) {
+        domManager.jobDetailsPageState();
+        $.ajax({
+            url: basePath + '/jobs/' + jobId,
+            type: 'GET',
+            success: function (job) {
+                $('#jobDtlsTitle').text(job.title);
+                $('#jobDtlsType').text(job.type);
+                $('#jobDtlsLoc').text(job.location);
+                $('#jobDtlsDesc').text(job.description);
+                $('#jobDtlsCreatedAt').text(job.created_at);
+                $('#jobDtlsHowToApply').text(job.how_to_apply);
+                $('#jobDtlsCompany').text(job.company);
+                $('#jobDtlsCompanyUrl').text(job.company_url);
+                $('#jobDtlsCompanyLogo').attr("src", job.company_logo);
+            }
+        });
+    }
+}
 
 var adminManager = {
 
@@ -146,6 +193,17 @@ var domManager = {
         $('#signUpPage').hide();
         $('#adminPanelPage').hide();
         $('#jobDetailsPage').hide();
+
+        if(isLogged){
+            domManager.loggedState();
+            jobsManager.recommendedJobs();
+        } else{
+            domManager.loggedOutState();
+            $('#btnAdminPanel').hide();
+        }
+        if(isAdminLogged){
+            $('#btnAdminPanel').show();
+        }
     },
     preferencePageState : function() {
         $('#homePage').hide();
