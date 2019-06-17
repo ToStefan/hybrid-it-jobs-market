@@ -12,6 +12,7 @@ public interface UserService {
     UserDTO create(UserDTO userDTO);
     UserDTO update(UserDTO userDTO);
     void remove(Long id);
+    Long elementsCount();
 
 }
 

@@ -258,13 +258,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8 offset-md-4">
-                    <ul class="pagination">
-                        <li class="page-item"> <a class="page-link" href="#"> <span>«</span></a> </li>
-                        <li class="page-item active"> <a class="page-link" href="#">1</a> </li>
-                        <li class="page-item"> <a class="page-link" href="#">2</a> </li>
-                        <li class="page-item"> <a class="page-link" href="#">3</a> </li>
-                        <li class="page-item"> <a class="page-link" href="#">4</a> </li>
-                        <li class="page-item"> <a class="page-link" href="#"> <span>»</span></a> </li>
+                    <ul class="pagination" id="usersPagination">
+
                     </ul>
                 </div>
             </div>
@@ -290,7 +285,6 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8 offset-md-2">
-                    <div>
                         <div class="form-group row"> <label for="inputusername" class="col-2 col-form-label">Username</label>
                             <div class="col-10">
                                 <input type="text" class="form-control" id="inputusername" required="required"> </div>
@@ -299,8 +293,10 @@
                             <div class="col-10">
                                 <input type="password" class="form-control" id="inputpassword" required="required"> </div>
                         </div>
-                    </div>
-                    <div>
+                        <div class="form-group row"> <label for="inputemail" class="col-2 col-form-label">E-mail</label>
+                            <div class="col-10">
+                                <input type="email" class="form-control" id="inputemail" required="required"> </div>
+                        </div>
                         <div class="form-group row"> <label for="inputfirstname" class="col-2 col-form-label">Firstname</label>
                             <div class="col-10">
                                 <input type="text" class="form-control" id="inputfirstname" required="required"> </div>
@@ -310,7 +306,6 @@
                                 <input type="text" class="form-control" id="inputlastname" required="required"> </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg" id="btnConfirmSignUp">Sign up</button>
-                    </div>
                 </div>
             </div>
         </div>

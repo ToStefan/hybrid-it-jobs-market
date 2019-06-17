@@ -3,9 +3,17 @@ var basePath = 'http://localhost:8080/api';
 var isLogged = true;
 var isAdminLogged = true;
 
+var preferedLocation = "Berlin";
+var preferedDesc = "java";
+var preferFullTime = true;
+
+
 $(document).ready(function() {
 
     domManager.homePageState();
+    
+
+
     $('#btnAdminPanel').hide();
     if(isLogged){
         domManager.loggedState();
@@ -26,12 +34,8 @@ $(document).ready(function() {
     });
     $('#btnAdminPanel').click(function(e) {
         e.preventDefault();
-        domManager.adminPanelPageState();
-        pageDto = {
-            "page": 0,
-            "elementsCount": 3
-        }
-        adminManager.getUsers(JSON.stringify(pageDto));
+        adminManager.usersPagination();
+        adminManager.createAdminPage(0, 3);
     });
     $('#btnSignIn').click(function(e) {
         e.preventDefault();
@@ -48,8 +52,55 @@ $(document).ready(function() {
 
 });
 
+var gitHubManager = {
+
+    getRecommendedJobs: function () {
+
+
+
+    }
+}
+
+
 var adminManager = {
 
+    usersPagination: function() {
+        $.ajax({
+            url: basePath + '/users/count',
+            type: 'GET',
+            success: function (count) {
+                $('#usersPagination').empty();
+                $('#usersPagination').append(
+                    '<li class="page-item"><button class="page-link" href="#"> <span>«</span></button></li>');
+                for (var i = 1; i <= count; i++) {
+                    $('#usersPagination').append(
+                        '<li class="page-item">' +
+                            '<button value="' + i + '" class="page-link linkAsButton" href="#">' + i + '</button>' +
+                        '</li>'
+                    );
+                }
+                $('#usersPagination').append(
+                    '<li class="page-item"><button class="page-link" href="#"> <span>»</span></button></li>');
+                $('.linkAsButton').click(function(e) {
+                    e.preventDefault();
+                    var page = $(this).val() - 1;
+                    adminManager.createAdminPage(page, 3)
+                });
+            },
+            error: function (data, textStatus, xhr) {
+                console.log('error!');
+            }
+        });
+
+    },
+    createAdminPage: function(page, elementsCount) {
+        domManager.adminPanelPageState();
+        pageDto = {
+            "page": page,
+            "elementsCount": elementsCount
+        }
+        adminManager.getUsers(JSON.stringify(pageDto));
+    },
     getUsers: function (pageDto) {
         $.ajax({
             url : basePath + '/users/search',
@@ -76,10 +127,23 @@ var adminManager = {
                 $('.btnDeleteUser').click(function(e) {
                     e.preventDefault();
                     var id = $(this).val();
-                    console.log(id);
+                    adminManager.deleteUser(id);
                 });
             },
             error : function(data, textStatus, xhr) {
+                console.log('error!');
+            }
+        });
+    },
+    deleteUser: function(id) {
+        $.ajax({
+            url: basePath + '/users/' + id,
+            type: 'DELETE',
+            success: function () {
+                adminManager.usersPagination();
+                adminManager.createAdminPage(0, 3);
+            },
+            error: function (data, textStatus, xhr) {
                 console.log('error!');
             }
         });

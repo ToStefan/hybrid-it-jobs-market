@@ -20,6 +20,7 @@ public class UserDTO {
     private String lastname;
     private String username;
     private String password;
+    private String email;
     private List<Role> roles;
     private String jobDesc;
     private String jobLocation;
