@@ -22,7 +22,7 @@ public class UserMapper implements Mapper<User, UserDTO> {
         dto.setRoles(user.getRoles());
         dto.setJobDesc(user.getJobDesc());
         dto.setJobLocation(user.getJobLocation());
-        dto.setWorkingType(user.getWorkingType());
+        dto.setFullTime(user.getFullTime());
         dto.setEmailNotification(user.getEmailNotification());
         dto.setNotificationTime(user.getNotificationTime());
         return dto;
@@ -48,7 +48,7 @@ public class UserMapper implements Mapper<User, UserDTO> {
         entity.setRoles(userDTO.getRoles());
         entity.setJobDesc(userDTO.getJobDesc());
         entity.setJobLocation(userDTO.getJobLocation());
-        entity.setWorkingType(userDTO.getWorkingType());
+        entity.setFullTime(userDTO.getFullTime());
         entity.setEmailNotification(userDTO.getEmailNotification());
         entity.setNotificationTime(userDTO.getNotificationTime());
         return entity;

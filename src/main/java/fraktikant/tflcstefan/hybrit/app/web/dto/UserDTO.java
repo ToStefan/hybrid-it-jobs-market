@@ -2,7 +2,6 @@ package fraktikant.tflcstefan.hybrit.app.web.dto;
 
 import fraktikant.tflcstefan.hybrit.app.entity.EmailNotification;
 import fraktikant.tflcstefan.hybrit.app.entity.Role;
-import fraktikant.tflcstefan.hybrit.app.entity.WorkingType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,7 +23,7 @@ public class UserDTO {
     private List<Role> roles;
     private String jobDesc;
     private String jobLocation;
-    private WorkingType workingType;
+    private Boolean fullTime;
     private EmailNotification emailNotification;
     private Date notificationTime;
 }

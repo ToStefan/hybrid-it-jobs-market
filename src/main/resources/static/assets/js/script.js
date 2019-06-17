@@ -3,16 +3,9 @@ var basePath = 'http://localhost:8080/api';
 var isLogged = true;
 var isAdminLogged = true;
 
-var preferedLocation = "Berlin";
-var preferedDesc = "java";
-var preferFullTime = true;
-
-
 $(document).ready(function() {
 
     domManager.homePageState();
-    
-
 
     $('#btnAdminPanel').hide();
     if(isLogged){
@@ -52,15 +45,6 @@ $(document).ready(function() {
 
 });
 
-var gitHubManager = {
-
-    getRecommendedJobs: function () {
-
-
-
-    }
-}
-
 
 var adminManager = {
 
@@ -86,9 +70,6 @@ var adminManager = {
                     var page = $(this).val() - 1;
                     adminManager.createAdminPage(page, 3)
                 });
-            },
-            error: function (data, textStatus, xhr) {
-                console.log('error!');
             }
         });
 
@@ -129,9 +110,6 @@ var adminManager = {
                     var id = $(this).val();
                     adminManager.deleteUser(id);
                 });
-            },
-            error : function(data, textStatus, xhr) {
-                console.log('error!');
             }
         });
     },
@@ -142,9 +120,6 @@ var adminManager = {
             success: function () {
                 adminManager.usersPagination();
                 adminManager.createAdminPage(0, 3);
-            },
-            error: function (data, textStatus, xhr) {
-                console.log('error!');
             }
         });
     }

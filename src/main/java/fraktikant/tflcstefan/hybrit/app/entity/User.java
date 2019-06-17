@@ -46,9 +46,8 @@ public class User {
     @Column(name = "job_location")
     private String jobLocation;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "working_type")
-    private WorkingType workingType;
+    @Column(name = "full_time")
+    private Boolean fullTime;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "email_notification", nullable = false)
