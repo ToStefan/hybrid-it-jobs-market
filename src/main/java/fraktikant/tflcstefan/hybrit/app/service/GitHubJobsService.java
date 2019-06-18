@@ -7,6 +7,7 @@ import java.util.List;
 public interface GitHubJobsService {
 
     List<JobDTO> recommendedJobs(Long userId);
+    List<JobDTO> searchForJobs(JobDTO jobDto);
     JobDTO getJobById(String jobId);
 
 }

@@ -32,7 +32,7 @@
                 <div class="row">
                     <div class="col-md-12 py-2">
                         <select class="custom-select" id="selectWorkTypeSearchJob">
-                            <option selected>Choose working type...</option>
+                            <option value="0" selected>Choose working type...</option>
                             <option value="1">Full time</option>
                             <option value="2">Part time</option>
                         </select>
@@ -41,10 +41,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <input type="text" class="form-control mb-2" placeholder="Enter location">
+                            <input id="autocompleteLocation" type="text" class="form-control mb-2" placeholder="Enter location">
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control mb-2" placeholder="Enter description">
+                            <input id="descSearchJob" type="text" class="form-control mb-2" placeholder="Enter description">
                         </div>
                     </div>
                 </div>
@@ -53,11 +53,7 @@
                         <a class="btn btn-primary btn-lg btn-block text-dark" href="#" id="btnSearchJobs">Search</a>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row" id="searchedJobs"></div>
-                    </div>
-                </div>
+                <div class="row" id="searchedJobs"></div>
             </div>
         </div>
     </div>
@@ -228,6 +224,8 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="assets/js/script.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_5f6IMOZ3pDnMxN5a-keLwMufeQA_zHs&libraries=places"></script>
+<script src="assets/js/google.js"></script>
 </body>
 
 </html>

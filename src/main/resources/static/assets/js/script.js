@@ -9,8 +9,6 @@ $(document).ready(function() {
     $('#btnAdminPanel').hide();
     domManager.homePageState();
 
-    $('.dropdown-toggle').dropdown()
-
     $('#btnHome').click(function(e) {
         e.preventDefault();
         domManager.homePageState();
@@ -37,6 +35,21 @@ $(document).ready(function() {
         domManager.loggedOutState();
     });
 
+    $('#btnSearchJobs').click(function(e) {
+        e.preventDefault();
+        var type;
+        if($('#selectWorkTypeSearchJob').val() == 0){
+            type = null
+        } else {
+            type = $('#selectWorkTypeSearchJob option:selected').text();
+        }
+        jobDto = {
+            "type": type,
+            "location": $('#autocompleteLocation').val(),
+            "description": $('#descSearchJob').val()
+        }
+        jobsManager.searchForJobs(JSON.stringify(jobDto))
+    });
 });
 
 var jobsManager = {
@@ -62,7 +75,6 @@ var jobsManager = {
                                 '<div class="card-footer text-muted">' + job.created_at + '</div>' +
                             '</div>' +
                         '</div>'
-
                     );
                 });
                 $('.jobDetailsLink').click(function(e) {
@@ -88,6 +100,35 @@ var jobsManager = {
                 $('#jobDtlsCompany').text(job.company);
                 $('#jobDtlsCompanyUrl').text(job.company_url);
                 $('#jobDtlsCompanyLogo').attr("src", job.company_logo);
+            }
+        });
+    },
+    searchForJobs: function (jobDto) {
+        $.ajax({
+            url: basePath + '/jobs/search',
+            type: 'POST',
+            data: jobDto,
+            dataType : 'json',
+            contentType : 'application/json',
+            success: function (jobs) {
+                $('#searchedJobs').empty();
+                $('#searchedJobs').append('<div class="col-md-12"><h4 class="text-center">Search result:</h4></div>');
+                $.each(jobs, function(index, job) {
+                    $('#searchedJobs').append(
+                    '<div class="col-md-6">' +
+                        '<div class="card text-center m-2">' +
+                            '<div class="card-header">' +
+                                '<a href="#" value="' + job.id + '" class="jobDetailsLink">' + job.title + '</a>' +
+                            '</div>' +
+                            '<div class="card-body">' +
+                                '<h5 class="card-title">' + job.location + '</h5>' +
+                                '<h6 class="card-title">' + job.type + '</h6>' +
+                                '<p class="card-text">' + job.description.slice(0, 80) + '</p>' +
+                            '</div>' +
+                            '<div class="card-footer text-muted">' + job.created_at + '</div>' +
+                        '</div>' +
+                    '</div>');
+                });
             }
         });
     }

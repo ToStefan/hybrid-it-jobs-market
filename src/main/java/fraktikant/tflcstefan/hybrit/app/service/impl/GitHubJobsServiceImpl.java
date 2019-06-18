@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -23,6 +22,21 @@ public class GitHubJobsServiceImpl implements GitHubJobsService {
         String url = "https://jobs.github.com/positions.json?markdown=true&description=" + userDto.getJobDesc() +
                 "&location=" + userDto.getJobLocation();
         if (userDto.getFullTime()) {
+            url += "&full_time=true";
+        }
+
+        RestTemplate restTemplate = new RestTemplate();
+        List<JobDTO> response = restTemplate.getForObject(url, List.class);
+
+        return response;
+    }
+
+    @Override
+    public List<JobDTO> searchForJobs(JobDTO jobDto) {
+
+        String url = "https://jobs.github.com/positions.json?markdown=true&description=" + jobDto.getDescription() +
+                "&location=" + jobDto.getLocation();
+        if (jobDto.getType() == "Full Time") {
             url += "&full_time=true";
         }
 
