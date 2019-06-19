@@ -1,5 +1,7 @@
 package fraktikant.tflcstefan.hybrit.app.service.impl;
 
+import fraktikant.tflcstefan.hybrit.app.entity.User;
+import fraktikant.tflcstefan.hybrit.app.repository.UserRepository;
 import fraktikant.tflcstefan.hybrit.app.service.GitHubJobsService;
 import fraktikant.tflcstefan.hybrit.app.web.dto.JobDTO;
 import fraktikant.tflcstefan.hybrit.app.web.dto.UserDTO;
@@ -13,15 +15,15 @@ import java.util.List;
 @Service
 public class GitHubJobsServiceImpl implements GitHubJobsService {
 
-    private final UserServiceImpl userService;
+    private final UserRepository userRepository;
 
     @Override
-    public List<JobDTO> recommendedJobs(Long userId) {
+    public List<JobDTO> recommendedJobs(String loggedUsername) {
 
-        UserDTO userDto = userService.findById(userId);
-        String url = "https://jobs.github.com/positions.json?markdown=true&description=" + userDto.getJobDesc() +
-                "&location=" + userDto.getJobLocation();
-        if (userDto.getFullTime()) {
+        User user = userRepository.findByUsername(loggedUsername);
+        String url = "https://jobs.github.com/positions.json?markdown=true&description=" + user.getJobDesc() +
+                "&location=" + user.getJobLocation();
+        if (user.getFullTime()) {
             url += "&full_time=true";
         }
 

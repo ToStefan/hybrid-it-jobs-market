@@ -8,11 +8,10 @@ import java.util.List;
 public interface UserService {
 
     List<UserDTO> findAll(PageDTO pageDTO);
-    UserDTO findById(Long id);
     UserDTO create(UserDTO userDTO);
     UserDTO update(UserDTO userDTO);
     void remove(Long id);
     Long elementsCount();
-
+    Boolean existsByUsername(String username);
 }
 

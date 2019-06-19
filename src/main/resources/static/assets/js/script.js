@@ -1,8 +1,9 @@
-var basePath = 'http://localhost:8080/api';
+//>>> LocalStorage >>>
+//Token --> Index = 0;
+//Role --> Index = 1; Value: 2 - ROLE_ADMINI, 1 - ROLE_USER;
+//Logged username --> Index = 2;
 
-var isLogged = true;
-var isAdminLogged = true;
-var loggedUserId = 1;
+var basePath = 'http://localhost:8080/api';
 
 $(document).ready(function() {
 
@@ -32,7 +33,14 @@ $(document).ready(function() {
     });
     $('#btnLogout').click(function(e) {
         e.preventDefault();
+        $('#recommendedJobs').empty();
+        $('#searchedJobs').empty();
+        $('#usersPagination').empty();
+        $('#tableBody').empty();
+        $('#btnAdminPanel').hide();
+        storageManager.logout();
         domManager.loggedOutState();
+        domManager.homePageState()
     });
 
     $('#btnSearchJobs').click(function(e) {
@@ -50,14 +58,126 @@ $(document).ready(function() {
         }
         jobsManager.searchForJobs(JSON.stringify(jobDto))
     });
+
+    $('#btnSubmitSignIn').click(function(e) {
+        e.preventDefault();
+        if($('#inputUsernameSign').val() == "" || $('#inputPasswordSign').val() == ""){
+            alert("All fields are required!");
+        } else {
+            var userDto = {
+                "username": $('#inputUsernameSign').val(),
+                "password": $('#inputPasswordSign').val()
+            }
+            authManager.login(JSON.stringify(userDto));
+        }
+    });
+    $('#btnConfirmSignUp').click(function(e) {
+        e.preventDefault();
+        if($('#inputusername').val() == "" || $('#inputpassword').val() == "" || $('#inputemail').val() == "" ||
+            $('#inputfirstname').val() == "" || $('#inputlastname').val() == ""){
+            alert("All fields are required!");
+        }else {
+            var userDto = {
+                "username": $('#inputusername').val(),
+                "password": $('#inputpassword').val(),
+                "email": $('#inputemail').val(),
+                "firstname": $('#inputfirstname').val(),
+                "lastname": $('#inputlastname').val()
+            }
+            authManager.register(JSON.stringify(userDto));
+        }
+    });
+
 });
+
+var authManager = {
+
+    loadLoggedUser : function() {
+        $.ajax({
+            url : basePath + '/auth/me',
+            dataType : 'json',
+            type : 'POST',
+            contentType : 'application/json',
+            headers : storageManager.createAuthorizationTokenHeader(),
+            success : function(loggedUser) {
+                    storageManager.setLocalItem(1, loggedUser.authorities.length);
+                    storageManager.setLocalItem(2, loggedUser.username);
+                    jobsManager.recommendedJobs();
+                    if (loggedUser.authorities.length == 2) {
+                        $('#btnAdminPanel').show();
+                    }
+            },
+            error : function (response) {
+                console.log(response);
+            }
+        });
+    },
+    login : function(userDto) {
+        $.ajax({
+            url : basePath + '/auth/login',
+            dataType : 'json',
+            type : 'POST',
+            contentType : 'application/json',
+            data : userDto,
+            success : function(data) {
+               storageManager.setLocalItem(0, data.token);
+               domManager.homePageState();
+            },
+            error : function (response) {
+                alert(response.responseJSON.errorMessage);
+            }
+        });
+    },
+    register : function(userDto) {
+        $.ajax({
+            url : basePath + '/auth/register',
+            dataType : 'json',
+            type : 'POST',
+            contentType : 'application/json',
+            data : userDto,
+            success : function(user) {
+                domManager.signInPageState()
+                alert("Successfuly registered! Please sign in.");
+            },
+            error : function (response) {
+                alert(response.responseJSON.errorMessage);
+            }
+        });
+    }
+}
+
+var storageManager = {
+
+    getLocalItem : function(index) {
+        return localStorage.getItem(index);
+    },
+    setLocalItem : function(index, value) {
+        localStorage.setItem(index, value);
+    },
+    removeLocalItem : function(index) {
+        localStorage.removeItem(index);
+    },
+    createAuthorizationTokenHeader : function() {
+        var token = storageManager.getLocalItem(0);
+        return {
+            "Authorization" : "Bearer " + token
+        };
+    },
+    logout: function () {
+        storageManager.removeLocalItem(0);
+        storageManager.removeLocalItem(1);
+        storageManager.removeLocalItem(2);
+    }
+
+}
 
 var jobsManager = {
 
     recommendedJobs: function() {
         $.ajax({
-            url: basePath + '/jobs/user/' + loggedUserId,
+            url: basePath + '/jobs/user/' + storageManager.getLocalItem(2),
             type: 'GET',
+            headers : storageManager.createAuthorizationTokenHeader(),
             success: function (jobs) {
                 $('#recommendedJobs').empty();
                 $.each(jobs, function(index, job) {
@@ -90,6 +210,7 @@ var jobsManager = {
         $.ajax({
             url: basePath + '/jobs/' + jobId,
             type: 'GET',
+            headers : storageManager.createAuthorizationTokenHeader(),
             success: function (job) {
                 $('#jobDtlsTitle').text(job.title);
                 $('#jobDtlsType').text(job.type);
@@ -140,6 +261,7 @@ var adminManager = {
         $.ajax({
             url: basePath + '/users/count',
             type: 'GET',
+            headers : storageManager.createAuthorizationTokenHeader(),
             success: function (count) {
                 $('#usersPagination').empty();
                 $('#usersPagination').append(
@@ -177,7 +299,8 @@ var adminManager = {
             type : 'POST',
             contentType : 'application/json',
             data : pageDto,
-            success : function(users, textStatus, xhr) {
+            headers : storageManager.createAuthorizationTokenHeader(),
+            success : function(users) {
                 $('#tableBody').empty();
                 $.each(users, function(index, user) {
                     $('#tableBody').append(
@@ -205,9 +328,13 @@ var adminManager = {
         $.ajax({
             url: basePath + '/users/' + id,
             type: 'DELETE',
+            headers : storageManager.createAuthorizationTokenHeader(),
             success: function () {
                 adminManager.usersPagination();
                 adminManager.createAdminPage(0, 3);
+            },
+            error : function (response) {
+                alert(response.responseJSON.errorMessage);
             }
         });
     }
@@ -235,15 +362,12 @@ var domManager = {
         $('#adminPanelPage').hide();
         $('#jobDetailsPage').hide();
 
-        if(isLogged){
+        if (storageManager.getLocalItem(0) != null) {
             domManager.loggedState();
-            jobsManager.recommendedJobs();
-        } else{
+            authManager.loadLoggedUser();
+        } else {
             domManager.loggedOutState();
             $('#btnAdminPanel').hide();
-        }
-        if(isAdminLogged){
-            $('#btnAdminPanel').show();
         }
     },
     preferencePageState : function() {

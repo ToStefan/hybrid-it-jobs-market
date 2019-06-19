@@ -17,7 +17,26 @@ public class ExceptionController {
         ExceptionResponse error = new ExceptionResponse();
         error.setErrorMessage(exception.getMessage());
         error.setRequestedURI(request.getRequestURI());
+        return error;
+    }
 
+    @ExceptionHandler(value = UsernameAlreadyExistException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse handleUsernameAlreadyExist(final UsernameAlreadyExistException exception,
+                                                  final HttpServletRequest request) {
+        ExceptionResponse error = new ExceptionResponse();
+        error.setErrorMessage(exception.getMessage());
+        error.setRequestedURI(request.getRequestURI());
+        return error;
+    }
+
+    @ExceptionHandler(value = WrongUsernamePasswordException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse handleBadCredentials(final WrongUsernamePasswordException exception,
+                                                        final HttpServletRequest request) {
+        ExceptionResponse error = new ExceptionResponse();
+        error.setErrorMessage(exception.getMessage());
+        error.setRequestedURI(request.getRequestURI());
         return error;
     }
 
@@ -28,7 +47,6 @@ public class ExceptionController {
         ExceptionResponse error = new ExceptionResponse();
         error.setErrorMessage(exception.getMessage());
         error.setRequestedURI(request.getRequestURI());
-
         return error;
     }
 }

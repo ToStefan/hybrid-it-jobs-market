@@ -79,8 +79,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10 offset-md-1">
-                    <div class="form-group"> <label>Prefered job description</label> <input type="text" class="form-control" id="inputjobdesc"> </div>
-                    <div class="form-group pt-1"><label>Prefered job location<br></label> <input type="text" class="form-control" id="inputpreferedjobloc"> </div>
+                    <div class="form-group">
+                        <label>Prefered job description</label>
+                        <input type="text" class="form-control" id="inputjobdesc">
+                    </div>
+                    <div class="form-group pt-1">
+                        <label>Prefered job location<br></label>
+                        <input type="text" class="form-control" id="inputpreferedjobloc">
+                    </div>
                 </div>
             </div>
         </div>
@@ -90,7 +96,7 @@
             <div class="row">
                 <div class="col-md-10 offset-md-1">
                     <select class="custom-select" id="selectWorkTypePreference">
-                        <option selected>Choose working type...</option>
+                        <option value="0" selected>Choose working type...</option>
                         <option value="1">Full time</option>
                         <option value="2">Part time</option>
                     </select>
@@ -143,7 +149,7 @@
                         <label>Password</label>
                         <input type="password" class="form-control" placeholder="Enter Password" id="inputPasswordSign">
                     </div>
-                    <button id="btnSubmitSignIn" class="btn btn-primary">Submit</button>
+                    <button id="btnSubmitSignIn" class="btn btn-primary btn-lg">Sign in</button>
                 </div>
             </div>
         </div>
@@ -157,31 +163,31 @@
                     <div class="form-group row">
                         <label for="inputusername" class="col-2 col-form-label">Username</label>
                         <div class="col-10">
-                            <input type="text" class="form-control" id="inputusername" required="required">
+                            <input type="text" class="form-control" id="inputusername" placeholder="Enter username">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputpassword" class="col-2 col-form-label">Password</label>
                         <div class="col-10">
-                            <input type="password" class="form-control" id="inputpassword" required="required">
+                            <input type="password" class="form-control" id="inputpassword" placeholder="Enter password">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputemail" class="col-2 col-form-label">E-mail</label>
                         <div class="col-10">
-                            <input type="email" class="form-control" id="inputemail" required="required">
+                            <input type="email" class="form-control" id="inputemail" placeholder="Enter e-mail">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputfirstname" class="col-2 col-form-label">Firstname</label>
                         <div class="col-10">
-                            <input type="text" class="form-control" id="inputfirstname" required="required">
+                            <input type="text" class="form-control" id="inputfirstname" placeholder="Enter firstname">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputlastname" class="col-2 col-form-label">Lastname</label>
                         <div class="col-10">
-                            <input type="text" class="form-control" id="inputlastname" required="required">
+                            <input type="text" class="form-control" id="inputlastname" placeholder="Enter lastname">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg" id="btnConfirmSignUp">Sign up</button>

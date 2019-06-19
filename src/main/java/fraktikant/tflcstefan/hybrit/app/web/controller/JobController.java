@@ -5,6 +5,7 @@ import fraktikant.tflcstefan.hybrit.app.web.dto.JobDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class JobController {
         return new ResponseEntity<>(jobs, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/{job-id}")
     public ResponseEntity<JobDTO> getJobById(@PathVariable("job-id") String id) {
 
@@ -30,10 +32,11 @@ public class JobController {
         return new ResponseEntity<>(job, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/user/{user-id}")
-    public ResponseEntity<List<JobDTO>> recommendedJobs(@PathVariable("user-id") Long id) {
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping(value = "/user/{username}")
+    public ResponseEntity<List<JobDTO>> recommendedJobs(@PathVariable("username") String username) {
 
-        List<JobDTO> jobs = gitHubJobsService.recommendedJobs(id);
+        List<JobDTO> jobs = gitHubJobsService.recommendedJobs(username);
         return new ResponseEntity<>(jobs, HttpStatus.OK);
     }
 }

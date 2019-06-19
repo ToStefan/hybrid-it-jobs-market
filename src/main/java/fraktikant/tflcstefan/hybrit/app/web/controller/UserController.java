@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,36 +19,28 @@ public class UserController {
 
     private final UserServiceImpl userService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/search")
     public ResponseEntity<List<UserDTO>> search(@RequestBody PageDTO pageDTO) {
         List<UserDTO> dtos = userService.findAll(pageDTO);
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> findById(@PathVariable("id") Long id) {
-        UserDTO dtos = userService.findById(id);
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
-    }
-
-    @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
-        UserDTO retVal = userService.create(userDTO);
-        return new ResponseEntity<>(retVal, HttpStatus.OK);
-    }
-
+    @PreAuthorize("hasRole('USER')")
     @PutMapping
     public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO) {
         UserDTO retVal = userService.update(userDTO);
         return new ResponseEntity<>(retVal, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         userService.remove(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/count")
     public ResponseEntity<Long> pageCount() {
 
