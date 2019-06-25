@@ -1,5 +1,6 @@
 package fraktikant.tflcstefan.hybrit.app.security;
 
+import fraktikant.tflcstefan.hybrit.app.util.Constants;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -23,21 +23,18 @@ public class AuthenticationController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> authenticateUser(@RequestBody UserDTO userDTO) {
-
         JwtAuthenticationResponse jwt = authenticationService.login(userDTO);
         return new ResponseEntity<>(jwt, HttpStatus.OK);
     }
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
-
         UserDTO user = authenticationService.register(userDTO);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/me")
     public UserPrincipal getAuthenticatedUser(HttpServletRequest request) {
-
         return authenticationService.me(request);
     }
 }

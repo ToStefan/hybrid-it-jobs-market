@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="assets/style/theme.css" type="text/css">
+    <link rel="stylesheet" href="assets/style/custom.css" type="text/css">
 </head>
 
 <body>
@@ -62,14 +63,17 @@
     <div class="py-0 pt-3">
         <div class="container">
             <div class="row">
-                <div class="col-md-10 offset-md-1" style="">
-                    <div class="form-group pt-3"><label>Prefered notification time<br></label> <input type="text" class="form-control" id="inputNotfTime"> </div>
+                <div class="col-md-10 offset-md-1">
+                    <div class="form-group pt-3">
+                        <label>Prefered notification time<br></label>
+                        <input type="time" class="form-control" id="inputNotfTime">
+                    </div>
                     <select class="custom-select" id="selectNotifTypePreference">
-                        <option selected>Choose notification type...</option>
-                        <option value="1">Never</option>
-                        <option value="2">Daily</option>
-                        <option value="3">Weekly</option>
-                        <option value="4">Monthly</option>
+                        <option value="0" selected>Choose notification type...</option>
+                        <option value="1">NEVER</option>
+                        <option value="2">DAILY</option>
+                        <option value="3">WEEKLY</option>
+                        <option value="4">MONTHLY</option>
                     </select>
                 </div>
             </div>
@@ -104,6 +108,15 @@
             </div>
         </div>
     </div>
+    <div class="py-0 pt-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                <button class="btn btn-primary btn-lg" id="btnConfirmPreference">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div id="adminPanelPage">
     <div class="pt-5" style="">
@@ -116,9 +129,12 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Username</th>
-                                    <th>Password</th>
-                                    <th>Firstname</th>
-                                    <th>Lastname</th>
+                                    <th>E-Mail</th>
+                                    <th>Prefered job</th>
+                                    <th>Prefered location</th>
+                                    <th>Work type</th>
+                                    <th>Notification</th>
+                                    <th>Notification time</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody"></tbody>
@@ -190,7 +206,7 @@
                             <input type="text" class="form-control" id="inputlastname" placeholder="Enter lastname">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-lg" id="btnConfirmSignUp">Sign up</button>
+                    <button class="btn btn-primary btn-lg" id="btnConfirmSignUp">Sign up</button>
                 </div>
             </div>
         </div>
@@ -227,6 +243,7 @@
     </div>
 
 </div>
+
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="assets/js/script.js"></script>

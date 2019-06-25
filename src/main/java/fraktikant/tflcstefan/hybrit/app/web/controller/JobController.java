@@ -19,7 +19,6 @@ public class JobController {
 
     @PostMapping(value = "/search")
     public ResponseEntity<List<JobDTO>> searchJobs(@RequestBody JobDTO jobDto) {
-
         List<JobDTO> jobs = gitHubJobsService.searchForJobs(jobDto);
         return new ResponseEntity<>(jobs, HttpStatus.OK);
     }
@@ -27,7 +26,6 @@ public class JobController {
     @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/{job-id}")
     public ResponseEntity<JobDTO> getJobById(@PathVariable("job-id") String id) {
-
         JobDTO job = gitHubJobsService.getJobById(id);
         return new ResponseEntity<>(job, HttpStatus.OK);
     }
@@ -35,7 +33,6 @@ public class JobController {
     @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/user/{username}")
     public ResponseEntity<List<JobDTO>> recommendedJobs(@PathVariable("username") String username) {
-
         List<JobDTO> jobs = gitHubJobsService.recommendedJobs(username);
         return new ResponseEntity<>(jobs, HttpStatus.OK);
     }

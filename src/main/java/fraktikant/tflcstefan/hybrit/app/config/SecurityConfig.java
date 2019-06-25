@@ -53,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.jpeg",
                         "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/token/**").permitAll()
                 .antMatchers("/api/jobs/search").permitAll()
                 .anyRequest().authenticated();
         httpSecurity.csrf().disable();

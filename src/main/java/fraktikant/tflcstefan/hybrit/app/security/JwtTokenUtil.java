@@ -1,5 +1,6 @@
 package fraktikant.tflcstefan.hybrit.app.security;
 
+import fraktikant.tflcstefan.hybrit.app.util.Constants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;

@@ -33,6 +33,8 @@ $(document).ready(function() {
     });
     $('#btnLogout').click(function(e) {
         e.preventDefault();
+        $('#inputUsernameSign').val("");
+        $('#inputPasswordSign').val("");
         $('#recommendedJobs').empty();
         $('#searchedJobs').empty();
         $('#usersPagination').empty();
@@ -45,12 +47,8 @@ $(document).ready(function() {
 
     $('#btnSearchJobs').click(function(e) {
         e.preventDefault();
-        var type;
-        if($('#selectWorkTypeSearchJob').val() == 0){
-            type = null
-        } else {
-            type = $('#selectWorkTypeSearchJob option:selected').text();
-        }
+        var type = $('#selectWorkTypeSearchJob').val() == 0 ?
+                    null : $('#selectWorkTypeSearchJob option:selected').text();
         jobDto = {
             "type": type,
             "location": $('#autocompleteLocation').val(),
@@ -88,6 +86,22 @@ $(document).ready(function() {
         }
     });
 
+    $('#btnConfirmPreference').click(function(e) {
+        e.preventDefault();
+        var fullTime = $('#selectWorkTypeSearchJob').val() == 1 ? true : false;
+        var notificationTime = $('#selectNotifTypePreference').val() == 0 ?
+                    "NEVER" : $('#selectNotifTypePreference option:selected').text();
+
+        userDto = {
+            "username": storageManager.getLocalItem(2),
+            "notificationTime": $('#inputNotfTime').val(),
+            "emailNotification": notificationTime,
+            "jobDesc": $('#inputjobdesc').val(),
+            "jobLocation": $('#inputpreferedjobloc').val(),
+            "fullTime": fullTime,
+        }
+        userManager.updatePreference(JSON.stringify(userDto));
+    });
 });
 
 var authManager = {
@@ -103,12 +117,10 @@ var authManager = {
                     storageManager.setLocalItem(1, loggedUser.authorities.length);
                     storageManager.setLocalItem(2, loggedUser.username);
                     jobsManager.recommendedJobs();
+                    userManager.getUserPreference();
                     if (loggedUser.authorities.length == 2) {
                         $('#btnAdminPanel').show();
                     }
-            },
-            error : function (response) {
-                console.log(response);
             }
         });
     },
@@ -137,7 +149,7 @@ var authManager = {
             data : userDto,
             success : function(user) {
                 domManager.signInPageState()
-                alert("Successfuly registered! Please sign in.");
+                alert("Successfuly registered! Check out mail for verification link!");
             },
             error : function (response) {
                 alert(response.responseJSON.errorMessage);
@@ -202,6 +214,9 @@ var jobsManager = {
                     var jobId = $(this).attr("value");
                     jobsManager.jobDetails(jobId);
                 });
+            },
+            error: function (response) {
+                console.log(response);
             }
         });
     },
@@ -303,13 +318,20 @@ var adminManager = {
             success : function(users) {
                 $('#tableBody').empty();
                 $.each(users, function(index, user) {
+                    preferedWorkType = user.fullTime == true ? "Full time" : "Part time";
+                    jobDesc = user.jobDesc == null ? "None" : user.jobDesc;
+                    jobLoc = user.jobLocation == null ? "None" : user.jobLocation;
+                    notifTime = user.notificationTime == null ? "None" : user.notificationTime;
                     $('#tableBody').append(
                         '<tr>' +
                             '<th>' + user.id + '</th>' +
                             '<td>' + user.username + '</td>' +
-                            '<td>' + user.password + '</td>' +
-                            '<td>' + user.firstname + '</td>' +
-                            '<td>' + user.lastname + '</td>' +
+                            '<td>' + user.email + '</td>' +
+                            '<td>' + jobDesc + '</td>' +
+                            '<td>' + jobLoc + '</td>' +
+                            '<td>' + preferedWorkType + '</td>' +
+                            '<td>' + user.emailNotification + '</td>' +
+                            '<td>' + notifTime + '</td>' +
                             '<td class="text-center">' +
                                 '<button value="' + user.id + '" class="btn btn-danger btnDeleteUser">Delete</button>' +
                             '</td>' +
@@ -337,6 +359,55 @@ var adminManager = {
                 alert(response.responseJSON.errorMessage);
             }
         });
+    }
+}
+
+var userManager = {
+    updatePreference: function (userDto) {
+        $.ajax({
+            url: basePath + '/users',
+            dataType : 'json',
+            type : 'PUT',
+            contentType : 'application/json',
+            data : userDto,
+            headers : storageManager.createAuthorizationTokenHeader(),
+            success: function (user) {
+                userManager.setUserPreference(user);
+                domManager.homePageState();
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+    },
+    getUserPreference: function () {
+        $.ajax({
+            url: basePath + '/users/preference/' + storageManager.getLocalItem(2),
+            dataType : 'json',
+            type : 'GET',
+            headers : storageManager.createAuthorizationTokenHeader(),
+            success: function (user) {
+                userManager.setUserPreference(user);
+            }
+        });
+    },
+    setUserPreference: function (user) {
+        $('#inputNotfTime').val(user.notificationTime);
+        $('#inputjobdesc').val(user.jobDesc);
+        $('#inputpreferedjobloc').val(user.jobLocation);
+        user.fullTime == true ?
+            $("#selectWorkTypePreference").val('1') : $("#selectWorkTypePreference").val('2');
+        if(user.emailNotification == "NEVER"){
+            $("#selectNotifTypePreference").val('1');
+        } else if(user.emailNotification == "DAILY"){
+            $("#selectNotifTypePreference").val('2');
+        } else if(user.emailNotification == "WEEKLY"){
+            $("#selectNotifTypePreference").val('3');
+        } else if(user.emailNotification == "MONTHLY"){
+            $("#selectNotifTypePreference").val('4');
+        } else {
+            $("#selectNotifTypePreference").val('0');
+        }
     }
 }
 

@@ -1,10 +1,11 @@
 package fraktikant.tflcstefan.hybrit.app.web.controller;
 
+import fraktikant.tflcstefan.hybrit.app.service.impl.MailServiceImpl;
+import fraktikant.tflcstefan.hybrit.app.util.Constants;
 import fraktikant.tflcstefan.hybrit.app.service.impl.UserServiceImpl;
 import fraktikant.tflcstefan.hybrit.app.web.dto.PageDTO;
 import fraktikant.tflcstefan.hybrit.app.web.dto.UserDTO;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +19,7 @@ import java.util.List;
 public class UserController {
 
     private final UserServiceImpl userService;
+    private final MailServiceImpl mailService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/search")
@@ -37,7 +39,15 @@ public class UserController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         userService.remove(id);
+        mailService.deletedUserNotify(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping(value = "/preference/{username}")
+    public ResponseEntity<UserDTO> userPrefeence(@PathVariable("username") String username){
+        UserDTO user = userService.findByUsername(username);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -47,10 +57,10 @@ public class UserController {
         Long elements = userService.elementsCount();
         Long page = null;
 
-        if(elements % 3 == 0) {
-            page = elements / 3;
+        if(elements % Constants.adminPanelPageSize == 0) {
+            page = elements / Constants.adminPanelPageSize;
         } else {
-            page = elements / 3;
+            page = elements / Constants.adminPanelPageSize;
             page += 1;
         }
         return new ResponseEntity<>(page, HttpStatus.OK);

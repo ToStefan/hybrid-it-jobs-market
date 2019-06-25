@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "enabled", nullable = false)
+    private Boolean isEnabled;
 
     @NotNull
     private String firstname;
@@ -46,7 +50,7 @@ public class User {
     @Column(name = "job_location")
     private String jobLocation;
 
-    @Column(name = "full_time")
+    @Column(name = "full_time", nullable = false)
     private Boolean fullTime;
 
     @Enumerated(EnumType.STRING)
@@ -54,5 +58,5 @@ public class User {
     private EmailNotification emailNotification;
 
     @Column(name = "notification_time")
-    private Date notificationTime;
+    private LocalTime notificationTime;
 }

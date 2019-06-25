@@ -20,7 +20,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final MailServiceImpl mailService;
 
     @Override
     @Transactional(readOnly = true)
@@ -32,6 +31,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public UserDTO findByUsername(String username) {
+        UserDTO userDTO = userMapper.toDTO(userRepository.findByUsername(username));
+        userDTO.setPassword(null);
+        return userDTO;
+    }
+
+    @Override
     @Transactional
     public UserDTO create(UserDTO userDTO) {
         return userMapper.toDTO(userRepository.save(userMapper.toEntity(userDTO)));
@@ -40,7 +47,16 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO update(UserDTO userDTO) {
-        return userMapper.toDTO(userRepository.save(userMapper.toEntity(userDTO)));
+        UserDTO oldUser = userMapper.toDTO(userRepository.findByUsername(userDTO.getUsername()));
+        oldUser.setNotificationTime(userDTO.getNotificationTime());
+        oldUser.setEmailNotification(userDTO.getEmailNotification());
+        oldUser.setJobDesc(userDTO.getJobDesc());
+        oldUser.setJobLocation(userDTO.getJobLocation());
+        oldUser.setFullTime(userDTO.getFullTime());
+
+        UserDTO retVal = userMapper.toDTO(userRepository.save(userMapper.toEntity(oldUser)));
+        retVal.setPassword(null);
+        return retVal;
     }
 
     @Override
@@ -49,7 +65,6 @@ public class UserServiceImpl implements UserService {
         User u = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(userId));
         userRepository.deleteById(userId);
-        mailService.deletedAccNotify(u);
     }
 
     @Override

@@ -17,7 +17,6 @@ public class UserAuthenticationService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
 
         User user = userRepository.findByUsername(username);
-        //error check ? not found ?
         return UserPrincipal.create(user);
     }
 }

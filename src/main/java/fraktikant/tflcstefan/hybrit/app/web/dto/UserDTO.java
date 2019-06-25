@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -15,6 +15,7 @@ import java.util.List;
 public class UserDTO {
 
     private Long id;
+    private Boolean isEnabled;
     private String firstname;
     private String lastname;
     private String username;
@@ -25,5 +26,5 @@ public class UserDTO {
     private String jobLocation;
     private Boolean fullTime;
     private EmailNotification emailNotification;
-    private Date notificationTime;
+    private LocalTime notificationTime;
 }

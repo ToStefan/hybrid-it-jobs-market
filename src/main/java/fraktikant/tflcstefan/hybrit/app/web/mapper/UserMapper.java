@@ -14,6 +14,7 @@ public class UserMapper implements Mapper<User, UserDTO> {
     public UserDTO toDTO(User user) {
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
+        dto.setIsEnabled(user.getIsEnabled());
         dto.setFirstname(user.getFirstname());
         dto.setLastname(user.getLastname());
         dto.setUsername(user.getUsername());
@@ -40,6 +41,7 @@ public class UserMapper implements Mapper<User, UserDTO> {
     public User toEntity(UserDTO userDTO) {
         User entity = new User();
         entity.setId(userDTO.getId());
+        entity.setIsEnabled(userDTO.getIsEnabled());
         entity.setFirstname(userDTO.getFirstname());
         entity.setLastname(userDTO.getLastname());
         entity.setUsername(userDTO.getUsername());

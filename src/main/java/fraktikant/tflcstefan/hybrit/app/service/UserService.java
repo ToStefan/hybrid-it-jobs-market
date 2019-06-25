@@ -8,6 +8,7 @@ import java.util.List;
 public interface UserService {
 
     List<UserDTO> findAll(PageDTO pageDTO);
+    UserDTO findByUsername(String username);
     UserDTO create(UserDTO userDTO);
     UserDTO update(UserDTO userDTO);
     void remove(Long id);

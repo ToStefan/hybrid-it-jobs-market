@@ -14,11 +14,13 @@ public class UserPrincipal implements UserDetails {
     private final String username;
     private final String password;
     private final List<GrantedAuthority> roles;
+    private final Boolean isEnabled;
 
-    public UserPrincipal(String username, String password, List<GrantedAuthority> roles) {
+    public UserPrincipal(String username, String password, List<GrantedAuthority> roles, Boolean isEnabled) {
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.isEnabled = isEnabled;
     }
 
     public static UserPrincipal create(User user) {
@@ -30,7 +32,8 @@ public class UserPrincipal implements UserDetails {
         return new UserPrincipal(
                 user.getUsername(),
                 user.getPassword(),
-                authorities
+                authorities,
+                user.getIsEnabled()
         );
     }
 
@@ -66,6 +69,6 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.isEnabled;
     }
 }

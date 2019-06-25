@@ -4,7 +4,6 @@ import fraktikant.tflcstefan.hybrit.app.entity.User;
 import fraktikant.tflcstefan.hybrit.app.repository.UserRepository;
 import fraktikant.tflcstefan.hybrit.app.service.GitHubJobsService;
 import fraktikant.tflcstefan.hybrit.app.web.dto.JobDTO;
-import fraktikant.tflcstefan.hybrit.app.web.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +22,7 @@ public class GitHubJobsServiceImpl implements GitHubJobsService {
         User user = userRepository.findByUsername(loggedUsername);
         String url = "https://jobs.github.com/positions.json?markdown=true&description=" + user.getJobDesc() +
                 "&location=" + user.getJobLocation();
-        if (user.getFullTime()) {
+        if (user.getFullTime() == true) {
             url += "&full_time=true";
         }
 
