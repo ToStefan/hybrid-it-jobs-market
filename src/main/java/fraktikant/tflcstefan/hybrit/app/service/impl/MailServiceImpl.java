@@ -5,11 +5,13 @@ import fraktikant.tflcstefan.hybrit.app.entity.User;
 import fraktikant.tflcstefan.hybrit.app.exception.EntityNotFoundException;
 import fraktikant.tflcstefan.hybrit.app.repository.UserRepository;
 import fraktikant.tflcstefan.hybrit.app.service.MailService;
+import fraktikant.tflcstefan.hybrit.app.util.Builders;
 import fraktikant.tflcstefan.hybrit.app.util.Constants;
 import fraktikant.tflcstefan.hybrit.app.web.dto.MailDTO;
 import fraktikant.tflcstefan.hybrit.app.web.dto.UserDTO;
 import fraktikant.tflcstefan.hybrit.app.web.mapper.UserMapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -17,6 +19,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class MailServiceImpl implements MailService {
@@ -43,16 +46,14 @@ public class MailServiceImpl implements MailService {
         ConfirmationToken token = confirmTokenService.generateToken(userMapper.toEntity(user));
         String confirmLink = Constants.basePath + "/api/token/confirm/" + token.getConfirmationToken();
 
-        String body = "<h3 style=\"color:green;\">Account confirmation!</h3>" +
-                "<p>Click " +
-                    "<a href=" + confirmLink + " target=\"_blank\">this</a>" +
-                " to confirm account.</p>";
+        String body = Builders.confirmLinkMailBody(confirmLink);
 
         String subject = "Hybrid It Jobs Market - Account Confirmation";
         MailDTO mail = new MailDTO(user.getEmail(), body, subject);
         sendEmail(mail);
     }
 
+    @Override
     public void sendEmail(MailDTO mail) {
 
         Message msg = new MimeMessage(getMailProps());
@@ -65,7 +66,7 @@ public class MailServiceImpl implements MailService {
             Transport.send(msg);
 
         } catch (MessagingException e) {
-            e.printStackTrace();
+            log.error(String.valueOf(e.getStackTrace()));
         }
     }
 

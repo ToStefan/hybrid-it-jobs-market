@@ -1,9 +1,15 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:usecasedb
+    url: jdbc:mysql://localhost:3306/usecasedb
+    username: root
+    password: root
+
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      enabled: true
-      path: /db
+    hibernate:
+      ddl-auto: create
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug

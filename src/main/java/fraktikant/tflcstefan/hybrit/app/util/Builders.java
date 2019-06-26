@@ -53,4 +53,13 @@ public class Builders {
         System.out.println(body);
         return body;
     }
+
+    public static String confirmLinkMailBody(String url){
+
+       return "<h3 style=\"color:green;\">Account confirmation!</h3>" +
+               "<p>Click " +
+                    "<a href=" + url + " target=\"_blank\">this</a>" +
+               " to confirm account.</p>";
+    }
+
 }
