@@ -64,6 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         userDto.setNotificationType(NotificationType.NEVER);
         userDto.setFullTime(true);
         userDto.setIsEnabled(false);
+        userDto.setNotificationOn(false);
 
         UserDTO user = userMapper.toDTO(userRepository.save(userMapper.toEntity(userDto)));
         mailService.userConfirmation(user);

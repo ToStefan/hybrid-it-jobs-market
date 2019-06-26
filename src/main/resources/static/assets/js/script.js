@@ -362,7 +362,7 @@ var userManager = {
             headers : storageManager.createAuthorizationTokenHeader(),
             success: function (user) {
                 userManager.setUserPreference(user);
-                domManager.homePageState();
+                domManager.preferencePageState();
             },
             error: function (response) {
                 console.log(response);
@@ -423,7 +423,7 @@ var userManager = {
         }
     },
     getPreferenceInputs: function () {
-        var fullTime = $('#selectWorkTypeSearchJob').val() == 1 ? true : false;
+        var fullTime = $('#selectWorkTypeSearchJob').val() == 2 ? false : true;
         var notificationType = $('#selectNotifTypePreference').val() == 0 ?
             "NEVER" : $('#selectNotifTypePreference option:selected').text();
 
