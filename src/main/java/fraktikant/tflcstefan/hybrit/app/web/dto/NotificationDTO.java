@@ -1,32 +1,22 @@
 package fraktikant.tflcstefan.hybrit.app.web.dto;
 
 import fraktikant.tflcstefan.hybrit.app.entity.NotificationType;
-import fraktikant.tflcstefan.hybrit.app.entity.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalTime;
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDTO {
+public class NotificationDTO {
 
-    private Long id;
-    private Boolean isEnabled;
-    private String firstname;
-    private String lastname;
-    private String username;
-    private String password;
-    private String email;
-    private List<Role> roles;
     private String jobDesc;
     private String jobLocation;
     private Boolean fullTime;
     private NotificationType notificationType;
     private LocalTime notificationTime;
-    private Boolean notificationOn;
-    private Integer taskId;
+    private String username;
+
 }

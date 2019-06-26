@@ -1,6 +1,6 @@
 package fraktikant.tflcstefan.hybrit.app.entity;
 
-public enum EmailNotification {
+public enum NotificationType {
     NEVER,
     DAILY,
     WEEKLY,

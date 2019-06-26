@@ -21,4 +21,15 @@ public class JobDTO {
     private String how_to_apply;
     private String company_logo;
 
+
+    public String toTableRow(){
+        return "<tr>" +
+                    "<td>"+ this.getTitle() + "</td>" +
+                    "<td>"+ this.getType() + "</td>" +
+                    "<td>"+ this.getCompany() + "</td>" +
+                    "<td>"+ this.getLocation() + "</td>" +
+                    "<td>"+ this.getHow_to_apply() + "</td>" +
+                "</tr>";
+    }
+
 }

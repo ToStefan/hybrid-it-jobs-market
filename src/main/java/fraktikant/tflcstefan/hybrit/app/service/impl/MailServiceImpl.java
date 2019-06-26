@@ -6,6 +6,7 @@ import fraktikant.tflcstefan.hybrit.app.exception.EntityNotFoundException;
 import fraktikant.tflcstefan.hybrit.app.repository.UserRepository;
 import fraktikant.tflcstefan.hybrit.app.service.MailService;
 import fraktikant.tflcstefan.hybrit.app.util.Constants;
+import fraktikant.tflcstefan.hybrit.app.web.dto.MailDTO;
 import fraktikant.tflcstefan.hybrit.app.web.dto.UserDTO;
 import fraktikant.tflcstefan.hybrit.app.web.mapper.UserMapper;
 import lombok.AllArgsConstructor;
@@ -32,7 +33,8 @@ public class MailServiceImpl implements MailService {
                 .orElseThrow(() -> new EntityNotFoundException(userId));
 
         String content = "<h2 style=\"color:red;\">Your account is suspended</h2><p>Reason: " + reason + "</p>";
-        sendEmail(user.getEmail(), content, "Account suspension :(");
+        MailDTO mail = new MailDTO(user.getEmail(), content, "Account suspension :(");
+        sendEmail(mail);
     }
 
     @Override
@@ -47,17 +49,18 @@ public class MailServiceImpl implements MailService {
                 " to confirm account.</p>";
 
         String subject = "Hybrid It Jobs Market - Account Confirmation";
-        sendEmail(user.getEmail(), body, subject);
+        MailDTO mail = new MailDTO(user.getEmail(), body, subject);
+        sendEmail(mail);
     }
 
-    private void sendEmail(String recipient, String mailContent, String subject) {
+    public void sendEmail(MailDTO mail) {
 
         Message msg = new MimeMessage(getMailProps());
         try {
             msg.setFrom(new InternetAddress(Constants.appMail, false));
-            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-            msg.setSubject(subject);
-            msg.setContent(mailContent, "text/html");
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mail.getRecipient()));
+            msg.setSubject(mail.getSubject());
+            msg.setContent(mail.getContent(), "text/html");
 
             Transport.send(msg);
 

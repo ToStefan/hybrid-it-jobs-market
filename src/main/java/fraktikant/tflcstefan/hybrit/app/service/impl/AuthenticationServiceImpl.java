@@ -1,6 +1,6 @@
 package fraktikant.tflcstefan.hybrit.app.service.impl;
 
-import fraktikant.tflcstefan.hybrit.app.entity.EmailNotification;
+import fraktikant.tflcstefan.hybrit.app.entity.NotificationType;
 import fraktikant.tflcstefan.hybrit.app.entity.Role;
 import fraktikant.tflcstefan.hybrit.app.entity.RoleName;
 import fraktikant.tflcstefan.hybrit.app.exception.UserVerificationException;
@@ -61,7 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         roles.add(roleRepository.findByName(RoleName.ROLE_USER));
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         userDto.setRoles(roles);
-        userDto.setEmailNotification(EmailNotification.NEVER);
+        userDto.setNotificationType(NotificationType.NEVER);
         userDto.setFullTime(true);
         userDto.setIsEnabled(false);
 

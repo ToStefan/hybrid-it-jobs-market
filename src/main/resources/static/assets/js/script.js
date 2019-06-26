@@ -88,19 +88,7 @@ $(document).ready(function() {
 
     $('#btnConfirmPreference').click(function(e) {
         e.preventDefault();
-        var fullTime = $('#selectWorkTypeSearchJob').val() == 1 ? true : false;
-        var notificationTime = $('#selectNotifTypePreference').val() == 0 ?
-                    "NEVER" : $('#selectNotifTypePreference option:selected').text();
-
-        userDto = {
-            "username": storageManager.getLocalItem(2),
-            "notificationTime": $('#inputNotfTime').val(),
-            "emailNotification": notificationTime,
-            "jobDesc": $('#inputjobdesc').val(),
-            "jobLocation": $('#inputpreferedjobloc').val(),
-            "fullTime": fullTime,
-        }
-        userManager.updatePreference(JSON.stringify(userDto));
+        userManager.updatePreference(JSON.stringify(userManager.getPreferenceInputs()));
     });
 });
 
@@ -322,6 +310,7 @@ var adminManager = {
                     jobDesc = user.jobDesc == null ? "None" : user.jobDesc;
                     jobLoc = user.jobLocation == null ? "None" : user.jobLocation;
                     notifTime = user.notificationTime == null ? "None" : user.notificationTime;
+                    notifOnOff = user.notificationOn == true ? "ON" : "OFF";
                     $('#tableBody').append(
                         '<tr>' +
                             '<th>' + user.id + '</th>' +
@@ -330,7 +319,7 @@ var adminManager = {
                             '<td>' + jobDesc + '</td>' +
                             '<td>' + jobLoc + '</td>' +
                             '<td>' + preferedWorkType + '</td>' +
-                            '<td>' + user.emailNotification + '</td>' +
+                            '<td>' + notifOnOff + "/" + user.notificationType + '</td>' +
                             '<td>' + notifTime + '</td>' +
                             '<td class="text-center">' +
                                 '<button value="' + user.id + '" class="btn btn-danger btnDeleteUser">Delete</button>' +
@@ -392,22 +381,100 @@ var userManager = {
         });
     },
     setUserPreference: function (user) {
+        $('#notificationButtons').empty();
+        if(user.notificationOn == true) {
+            $('#notificationButtons').append(
+                "<button class=\"btn btn-danger btn-lg\" id=\"btnTurnOffNotification\">Turn off</button>");
+        } else {
+            $('#notificationButtons').append(
+                "<button class=\"btn btn-primary btn-lg\" id=\"btnTurnOnNotification\">Turn on</button>")
+        }
+        $('#btnTurnOnNotification').click(function(e) {
+            e.preventDefault();
+            notificationDTO = schedulerManager.getNotificationDTO();
+            if(notificationDTO == null){
+                alert("Notification time, description and location cannot be empty & type cannot be NEVER!");
+            } else {
+                schedulerManager.addTask(JSON.stringify(notificationDTO));
+                userManager.updatePreference(JSON.stringify(userManager.getPreferenceInputs()));
+            }
+        });
+        $('#btnTurnOffNotification').click(function(e) {
+            e.preventDefault();
+            schedulerManager.removeTask();
+        });
+
         $('#inputNotfTime').val(user.notificationTime);
         $('#inputjobdesc').val(user.jobDesc);
         $('#inputpreferedjobloc').val(user.jobLocation);
         user.fullTime == true ?
             $("#selectWorkTypePreference").val('1') : $("#selectWorkTypePreference").val('2');
-        if(user.emailNotification == "NEVER"){
+        if(user.notificationType == "NEVER"){
             $("#selectNotifTypePreference").val('1');
-        } else if(user.emailNotification == "DAILY"){
+        } else if(user.notificationType == "DAILY"){
             $("#selectNotifTypePreference").val('2');
-        } else if(user.emailNotification == "WEEKLY"){
+        } else if(user.notificationType == "WEEKLY"){
             $("#selectNotifTypePreference").val('3');
-        } else if(user.emailNotification == "MONTHLY"){
+        } else if(user.notificationType == "MONTHLY"){
             $("#selectNotifTypePreference").val('4');
         } else {
             $("#selectNotifTypePreference").val('0');
         }
+    },
+    getPreferenceInputs: function () {
+        var fullTime = $('#selectWorkTypeSearchJob').val() == 1 ? true : false;
+        var notificationType = $('#selectNotifTypePreference').val() == 0 ?
+            "NEVER" : $('#selectNotifTypePreference option:selected').text();
+
+        userDto = {
+            "username": storageManager.getLocalItem(2),
+            "notificationTime": $('#inputNotfTime').val(),
+            "notificationType": notificationType,
+            "jobDesc": $('#inputjobdesc').val(),
+            "jobLocation": $('#inputpreferedjobloc').val(),
+            "fullTime": fullTime,
+        }
+        return userDto;
+    }
+}
+
+var schedulerManager = {
+    
+    removeTask: function () {
+        $.ajax({
+            url: basePath + '/scheduler/' + storageManager.getLocalItem(2),
+            type: 'DELETE',
+            headers : storageManager.createAuthorizationTokenHeader(),
+            success: function () {
+
+            },
+            error : function (response) {
+                console.log(response);
+            }
+        });
+    
+    },
+    addTask: function (notificationDTO) {
+        $.ajax({
+            url : basePath + '/scheduler',
+            dataType : 'json',
+            type : 'POST',
+            contentType : 'application/json',
+            data : notificationDTO,
+            //headers : storageManager.createAuthorizationTokenHeader(),
+            success : function() {
+            },
+            error: function (response) {
+            }
+        });
+    },
+    getNotificationDTO: function () {
+        notfDTO = userManager.getPreferenceInputs();
+        if(notfDTO.notificationTime == "" || notfDTO.jobDesc == "" || notfDTO.jobLocation == ""
+                || notfDTO.notificationType == "NEVER"){
+            notfDTO = null;
+        }
+        return notfDTO;
     }
 }
 

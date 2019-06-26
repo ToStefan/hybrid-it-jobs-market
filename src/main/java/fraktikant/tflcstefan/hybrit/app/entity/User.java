@@ -7,7 +7,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -54,9 +53,16 @@ public class User {
     private Boolean fullTime;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "email_notification", nullable = false)
-    private EmailNotification emailNotification;
+    @Column(name = "notification_type", nullable = false)
+    private NotificationType notificationType;
 
     @Column(name = "notification_time")
     private LocalTime notificationTime;
+
+    @Column(name = "notification_on", nullable = false)
+    private Boolean notificationOn;
+
+    @Column(name = "task_id")
+    private Integer taskId;
+
 }

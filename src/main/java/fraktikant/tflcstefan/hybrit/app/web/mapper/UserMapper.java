@@ -24,8 +24,10 @@ public class UserMapper implements Mapper<User, UserDTO> {
         dto.setJobDesc(user.getJobDesc());
         dto.setJobLocation(user.getJobLocation());
         dto.setFullTime(user.getFullTime());
-        dto.setEmailNotification(user.getEmailNotification());
+        dto.setNotificationType(user.getNotificationType());
         dto.setNotificationTime(user.getNotificationTime());
+        dto.setNotificationOn(user.getNotificationOn());
+        dto.setTaskId(user.getTaskId());
         return dto;
     }
 
@@ -51,8 +53,10 @@ public class UserMapper implements Mapper<User, UserDTO> {
         entity.setJobDesc(userDTO.getJobDesc());
         entity.setJobLocation(userDTO.getJobLocation());
         entity.setFullTime(userDTO.getFullTime());
-        entity.setEmailNotification(userDTO.getEmailNotification());
+        entity.setNotificationType(userDTO.getNotificationType());
         entity.setNotificationTime(userDTO.getNotificationTime());
+        entity.setNotificationOn(userDTO.getNotificationOn());
+        entity.setTaskId(userDTO.getTaskId());
         return entity;
     }
 

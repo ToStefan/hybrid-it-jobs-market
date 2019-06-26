@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO update(UserDTO userDTO) {
         UserDTO oldUser = userMapper.toDTO(userRepository.findByUsername(userDTO.getUsername()));
         oldUser.setNotificationTime(userDTO.getNotificationTime());
-        oldUser.setEmailNotification(userDTO.getEmailNotification());
+        oldUser.setNotificationType(userDTO.getNotificationType());
         oldUser.setJobDesc(userDTO.getJobDesc());
         oldUser.setJobLocation(userDTO.getJobLocation());
         oldUser.setFullTime(userDTO.getFullTime());
