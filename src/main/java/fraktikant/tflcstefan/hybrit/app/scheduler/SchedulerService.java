@@ -30,9 +30,7 @@ public class SchedulerService {
 
         user.setNotificationOn(true);
         user.setTaskId(taskId);
-        User retVal = userRepository.save(user);
-        log.info("Task scheduled: " + retVal.getNotificationOn());
-        log.info("Task ID: " + retVal.getTaskId());
+        userRepository.save(user);
     }
 
     public void removeTask(String username){

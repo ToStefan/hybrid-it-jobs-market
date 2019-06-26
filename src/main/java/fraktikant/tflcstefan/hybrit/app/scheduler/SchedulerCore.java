@@ -48,7 +48,7 @@ public class SchedulerCore {
                 .schedule(task, new CronTrigger(cron, TimeZone.getTimeZone(TimeZone.getDefault().getID())));
         Integer taskId = tasks.size() + 1;
         tasks.put(taskId, scheduledTask);
-
+        log.info("Task scheduled, ID: " + taskId);
         return taskId;
     }
 
