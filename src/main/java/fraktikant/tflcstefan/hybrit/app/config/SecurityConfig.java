@@ -54,7 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/token/**").permitAll()
-                .antMatchers("/api/scheduler/**").permitAll()
                 .antMatchers("/api/jobs/search").permitAll()
                 .anyRequest().authenticated();
         httpSecurity.csrf().disable();

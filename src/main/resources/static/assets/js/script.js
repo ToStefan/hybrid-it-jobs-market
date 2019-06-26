@@ -183,7 +183,7 @@ var jobsManager = {
                 $.each(jobs, function(index, job) {
                     $('#recommendedJobs').append(
                         '<div class="col-md-6">' +
-                            '<div class="card text-center m-2">' +
+                            '<div class="card text-center m-1">' +
                                 '<div class="card-header">' +
                                     '<a href="#" value="' + job.id + '" class="jobDetailsLink">' + job.title + '</a>' +
                                 '</div>' +
@@ -240,7 +240,7 @@ var jobsManager = {
                 $.each(jobs, function(index, job) {
                     $('#searchedJobs').append(
                     '<div class="col-md-6">' +
-                        '<div class="card text-center m-2">' +
+                        '<div class="card text-center m-1">' +
                             '<div class="card-header">' +
                                 '<a href="#" value="' + job.id + '" class="jobDetailsLink">' + job.title + '</a>' +
                             '</div>' +
@@ -402,6 +402,7 @@ var userManager = {
         $('#btnTurnOffNotification').click(function(e) {
             e.preventDefault();
             schedulerManager.removeTask();
+            userManager.updatePreference(JSON.stringify(userManager.getPreferenceInputs()));
         });
 
         $('#inputNotfTime').val(user.notificationTime);
@@ -461,7 +462,7 @@ var schedulerManager = {
             type : 'POST',
             contentType : 'application/json',
             data : notificationDTO,
-            //headers : storageManager.createAuthorizationTokenHeader(),
+            headers : storageManager.createAuthorizationTokenHeader(),
             success : function() {
             },
             error: function (response) {
