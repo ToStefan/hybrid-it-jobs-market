@@ -3,7 +3,7 @@
 //Role --> Index = 1; Value: 2 - ROLE_ADMINI, 1 - ROLE_USER;
 //Logged username --> Index = 2;
 
-var basePath = 'http://localhost:8080/api';
+var basePath = 'https://hybrid-jobs-market.herokuapp.com/api';
 
 $(document).ready(function() {
 
