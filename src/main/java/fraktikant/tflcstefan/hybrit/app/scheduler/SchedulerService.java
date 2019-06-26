@@ -35,9 +35,9 @@ public class SchedulerService {
 
     public void removeTask(String username){
         User user = userRepository.findByUsername(username);
+        schedulerCore.removeTaskFromScheduler(user.getTaskId());
         user.setTaskId(null);
         user.setNotificationOn(false);
-        schedulerCore.removeTaskFromScheduler(user.getTaskId());
         userRepository.save(user);
     }
 }
