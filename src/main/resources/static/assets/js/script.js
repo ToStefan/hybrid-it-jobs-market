@@ -362,7 +362,7 @@ var userManager = {
             headers : storageManager.createAuthorizationTokenHeader(),
             success: function (user) {
                 userManager.setUserPreference(user);
-                domManager.preferencePageState();
+                domManager.homePageState()
             },
             error: function (response) {
                 console.log(response);
